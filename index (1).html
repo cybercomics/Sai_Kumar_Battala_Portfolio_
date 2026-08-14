@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sai Kumar Battala — Penetration Tester / VAPT</title>
+<meta name="description" content="Sai Kumar Battala — Penetration Tester & VAPT specialist. CEH certified, MSc Cybersecurity, CTF finalist. Proof of work, not just claims.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0B1220; --bg-2:#0E1728; --panel:#121C2E; --panel-2:#152036;
+    --border:#22334A; --border-soft:#1A2740;
+    --text:#EDF2F8; --muted:#93A6BC; --dim:#5C7189;
+    --amber:#E8A33D; --amber-dim:rgba(232,163,61,.13);
+    --red:#E5626A; --red-dim:rgba(229,98,106,.13);
+    --teal:#54C6D9; --teal-dim:rgba(84,198,217,.13);
+    --serif:'Fraunces', Georgia, serif;
+    --mono:'IBM Plex Mono', ui-monospace, monospace;
+    --sans:'Inter', system-ui, sans-serif;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion:reduce){ html{ scroll-behavior:auto; } }
+  body{
+    margin:0; background:var(--bg); color:var(--text); font-family:var(--sans);
+    line-height:1.6; -webkit-font-smoothing:antialiased;
+  }
+  a{ color:var(--amber); }
+  ::selection{ background:var(--amber); color:#1A1000; }
+  *:focus-visible{ outline:2px solid var(--amber); outline-offset:3px; }
+
+  .skip-link{ position:absolute; left:-9999px; top:0; z-index:200; background:var(--amber); color:#1A1000; padding:10px 16px; font-family:var(--mono); font-weight:600; }
+  .skip-link:focus{ left:12px; top:12px; }
+
+  .wrap{ max-width:920px; margin:0 auto; padding:0 28px; }
+
+  /* classification strip */
+  .classbar{
+    background:var(--bg-2); border-bottom:1px solid var(--border-soft);
+    font-family:var(--mono); font-size:.7rem; letter-spacing:.08em; color:var(--dim);
+    padding:9px 0;
+  }
+  .classbar .wrap{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:6px; }
+  .classbar .tag{ color:var(--amber); }
+
+  /* ---------- hero / cover ---------- */
+  header.hero{ padding:56px 0 40px; border-bottom:1px solid var(--border-soft); position:relative; overflow:hidden; }
+  .stamp{
+    position:absolute; top:38px; right:-22px; font-family:var(--mono); font-size:.66rem;
+    color:var(--dim); border:1px solid var(--border); padding:4px 30px; transform:rotate(6deg);
+    letter-spacing:.08em; opacity:.7; display:none;
+  }
+  @media(min-width:760px){ .stamp{ display:block; } }
+
+  .eyebrow{ font-family:var(--mono); font-size:.78rem; color:var(--muted); letter-spacing:.06em; margin-bottom:14px; }
+  .eyebrow .dot{ color:var(--red); }
+  h1{ font-family:var(--serif); font-weight:600; font-size:clamp(2.4rem,6vw,4rem); margin:0 0 8px; letter-spacing:-0.01em; }
+  .role-title{ font-family:var(--mono); font-size:1rem; color:var(--amber); margin:0 0 22px; }
+  .role-title span{ color:var(--dim); }
+
+  .exec-summary{ max-width:64ch; color:var(--muted); font-size:1.02rem; margin-bottom:30px; }
+  .exec-summary strong{ color:var(--text); font-weight:600; }
+
+  .cta-row{ display:flex; gap:12px; flex-wrap:wrap; margin-bottom:36px; }
+  .btn{ font-family:var(--mono); font-size:.84rem; padding:12px 20px; border-radius:5px; border:1px solid var(--border); color:var(--text); display:inline-flex; align-items:center; gap:8px; }
+  .btn:hover{ text-decoration:none; border-color:var(--amber); }
+  .btn.primary{ background:var(--amber); color:#1A1000; border-color:var(--amber); font-weight:600; }
+  .btn.primary:hover{ background:#f0b45c; }
+
+  .proof-strip{ display:grid; grid-template-columns:repeat(4,1fr); border:1px solid var(--border); border-radius:8px; overflow:hidden; }
+  .proof-strip div{ background:var(--panel); padding:16px 14px; border-right:1px solid var(--border); }
+  .proof-strip div:last-child{ border-right:none; }
+  .proof-strip .n{ font-family:var(--serif); font-size:1.5rem; color:var(--amber); font-weight:600; }
+  .proof-strip .l{ font-family:var(--mono); font-size:.68rem; color:var(--muted); text-transform:uppercase; letter-spacing:.04em; margin-top:4px; }
+
+  /* ---------- shared section chrome ---------- */
+  section{ padding:56px 0; border-bottom:1px solid var(--border-soft); }
+  section:last-of-type{ border-bottom:none; }
+  .sec-eyebrow{ font-family:var(--mono); font-size:.72rem; color:var(--dim); letter-spacing:.08em; margin:0 0 6px; }
+  h2{ font-family:var(--serif); font-size:1.7rem; font-weight:600; margin:0 0 8px; }
+  .sec-desc{ color:var(--muted); font-size:.95rem; margin:0 0 30px; max-width:60ch; }
+
+  .reveal{ opacity:1; transform:none; transition:opacity .5s ease, transform .5s ease; }
+  .reveal.pre{ opacity:0; transform:translateY(14px); }
+  .reveal.pre.in{ opacity:1; transform:none; }
+  @media (prefers-reduced-motion:reduce){ .reveal.pre{ opacity:1; transform:none; transition:none; } }
+
+  /* ---------- findings grid ---------- */
+  .findings{ display:grid; grid-template-columns:repeat(2,1fr); gap:14px; }
+  .finding{ background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:20px; border-left:3px solid var(--border); }
+  .finding.critical{ border-left-color:var(--red); }
+  .finding.high{ border-left-color:var(--amber); }
+  .finding.medium{ border-left-color:var(--teal); }
+  .finding-top{ display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; gap:10px; }
+  .fid{ font-family:var(--mono); font-size:.7rem; color:var(--dim); }
+  .impact{ font-family:var(--mono); font-size:.66rem; padding:3px 8px; border-radius:4px; letter-spacing:.05em; font-weight:600; }
+  .impact.critical{ background:var(--red-dim); color:var(--red); }
+  .impact.high{ background:var(--amber-dim); color:var(--amber); }
+  .impact.medium{ background:var(--teal-dim); color:var(--teal); }
+  .finding h3{ margin:0 0 6px; font-size:1.02rem; font-family:var(--sans); font-weight:700; }
+  .finding p{ margin:0; color:var(--muted); font-size:.9rem; }
+  .finding .src{ display:block; margin-top:10px; font-family:var(--mono); font-size:.7rem; color:var(--dim); }
+
+  /* ---------- timeline ---------- */
+  .timeline{ border-left:1px solid var(--border); margin-left:6px; }
+  .tl-item{ position:relative; padding:2px 0 32px 26px; }
+  .tl-item::before{ content:''; position:absolute; left:-5px; top:6px; width:9px; height:9px; border-radius:50%; background:var(--bg); border:2px solid var(--amber); }
+  .tl-item.past::before{ border-color:var(--dim); }
+  .tl-head{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:4px; }
+  .tl-status{ font-family:var(--mono); font-size:.66rem; padding:3px 8px; border-radius:4px; letter-spacing:.05em; }
+  .tl-status.active{ color:var(--amber); background:var(--amber-dim); }
+  .tl-status.past{ color:var(--dim); background:var(--panel-2); }
+  .tl-date{ font-family:var(--mono); font-size:.74rem; color:var(--dim); }
+  .tl-item h3{ margin:2px 0 1px; font-size:1rem; font-family:var(--sans); }
+  .tl-item .org{ color:var(--muted); font-size:.87rem; margin-bottom:8px; }
+  .tl-item ul{ margin:0; padding-left:18px; color:var(--muted); font-size:.9rem; }
+  .tl-item li{ margin-bottom:4px; }
+
+  /* ---------- skill matrix ---------- */
+  .matrix{ display:flex; flex-direction:column; gap:16px; }
+  .m-row{ display:grid; grid-template-columns:200px 1fr; gap:16px; align-items:start; }
+  .m-cat{ font-family:var(--mono); font-size:.78rem; color:var(--text); padding-top:3px; }
+  .m-tags{ display:flex; flex-wrap:wrap; gap:6px; }
+  .m-tags span{ font-family:var(--mono); font-size:.74rem; padding:4px 9px; border:1px solid var(--border); border-radius:4px; color:var(--muted); background:var(--panel); }
+  .dots{ display:flex; gap:4px; margin-top:8px; }
+  .dots i{ width:8px; height:8px; border-radius:50%; background:var(--border); display:block; }
+  .dots i.on{ background:var(--amber); }
+
+  /* ---------- certifications ---------- */
+  .cert-list{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+  .cert{ background:var(--panel); border:1px solid var(--border); border-radius:6px; padding:14px 16px; display:flex; gap:10px; align-items:flex-start; }
+  .cert .clip{ font-family:var(--mono); color:var(--dim); font-size:.9rem; line-height:1.4; }
+  .cert div h4{ margin:0 0 3px; font-size:.86rem; line-height:1.3; }
+  .cert div .meta{ font-family:var(--mono); font-size:.7rem; color:var(--dim); }
+
+  /* ---------- projects ---------- */
+  .proj{ padding:16px 0; border-top:1px solid var(--border-soft); }
+  .proj:first-child{ border-top:none; }
+  .proj h3{ margin:0 0 4px; font-size:1rem; }
+  .proj p{ margin:0; color:var(--muted); font-size:.9rem; }
+  .proj .badge{ font-family:var(--mono); font-size:.66rem; color:var(--teal); }
+
+  /* ---------- education ---------- */
+  .edu-row{ display:flex; justify-content:space-between; padding:12px 0; border-top:1px solid var(--border-soft); gap:16px; flex-wrap:wrap; }
+  .edu-row:first-child{ border-top:none; }
+  .edu-row h3{ margin:0; font-size:.98rem; }
+  .edu-row .school{ color:var(--muted); font-size:.87rem; margin-top:2px; }
+  .edu-row .date{ font-family:var(--mono); font-size:.78rem; color:var(--dim); white-space:nowrap; }
+
+  /* ---------- close / CTA ---------- */
+  .close-panel{
+    background:linear-gradient(135deg, var(--panel), var(--bg-2));
+    border:1px solid var(--border); border-radius:12px; padding:44px 36px; text-align:center;
+  }
+  .close-panel h2{ margin-bottom:10px; }
+  .close-panel p{ color:var(--muted); max-width:52ch; margin:0 auto 26px; }
+  .close-cta{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-bottom:26px; }
+  .contact-line{ font-family:var(--mono); font-size:.84rem; color:var(--muted); display:flex; gap:18px; justify-content:center; flex-wrap:wrap; }
+  .contact-line a, .contact-line span{ color:var(--text); margin:0 9px; }
+  .cta-row, .close-cta{ gap:12px; }
+  .cta-row a, .close-cta a{ margin-right:0; }
+
+  footer{ text-align:center; padding:28px 0 54px; font-family:var(--mono); font-size:.72rem; color:var(--dim); }
+
+  @media(max-width:760px){
+    .findings{ grid-template-columns:1fr; }
+    .proof-strip{ grid-template-columns:repeat(2,1fr); }
+    .cert-list{ grid-template-columns:1fr 1fr; }
+    .m-row{ grid-template-columns:1fr; }
+  }
+  @media(max-width:480px){
+    .cert-list{ grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+
+<div class="classbar">
+  <div class="wrap">
+    <span><span class="tag">CANDIDATE PROFILE</span> · PENETRATION TESTER / VAPT</span>
+    <span>REF: SKB-2026-VAPT-01</span>
+  </div>
+</div>
+
+<main id="main">
+  <header class="hero">
+    <div class="wrap">
+      <div class="stamp">FOR HIRING<br>REVIEW</div>
+      <p class="eyebrow"><span class="dot">●</span> Actively interviewing — UK-based, remote or on-site</p>
+      <h1>Sai Kumar Battala</h1>
+      <p class="role-title">Penetration Tester <span>/</span> VAPT <span>/</span> Ethical Hacking</p>
+      <p class="exec-summary">
+        <strong>CEH-certified</strong> MSc Cybersecurity student who has already gained <strong>root access in a live internal engagement</strong>, ranks in the <strong>top 20% globally on TryHackMe</strong>, and reached the <strong>national CTF finals</strong> at UST GenCyS 2025. Below is the evidence — not a list of adjectives.
+      </p>
+      <div class="cta-row">
+        <a class="btn primary" href="mailto:saikumarbattala10@gmail.com?subject=Interview%20Request%20%E2%80%94%20Sai%20Kumar%20Battala&body=Hi%20Sai%2C%0A%0AWe%27d%20like%20to%20schedule%20an%20interview.%20Are%20you%20available%20for%20a%20call%20this%20week%3F">→ Request an interview</a>
+        <a class="btn" href="Sai_Kumar_Battala_VAPT_Resume.pdf" download>↓ Download CV (PDF)</a>
+        <a class="btn" href="tel:+447721604874">☎ +44 7721 604874</a>
+        <a class="btn" href="https://linkedin.com/in/sai-kumar-battala" target="_blank" rel="noopener">LinkedIn</a>
+        <a class="btn" href="https://github.com/cybercomics" target="_blank" rel="noopener">GitHub</a>
+      </div>
+      <div class="proof-strip">
+        <div><div class="n">CEH</div><div class="l">EC-Council certified</div></div>
+        <div><div class="n">Top 20%</div><div class="l">TryHackMe global rank</div></div>
+        <div><div class="n">Finalist</div><div class="l">UST GenCyS 2025 CTF</div></div>
+        <div><div class="n">Root</div><div class="l">Access gained, live engagement</div></div>
+      </div>
+    </div>
+  </header>
+
+  <section id="findings">
+    <div class="wrap">
+      <p class="sec-eyebrow reveal">01 · KEY FINDINGS</p>
+      <h2 class="reveal">What the record actually shows</h2>
+      <p class="sec-desc reveal">Six things worth knowing before the first call, ranked by how much they should move the needle.</p>
+
+      <div class="findings reveal">
+        <div class="finding critical">
+          <div class="finding-top"><span class="fid">FINDING-01</span><span class="impact critical">IMPACT: CRITICAL</span></div>
+          <h3>Gained full root access in a live engagement</h3>
+          <p>Identified 5–6 exploitable vulnerabilities on internal systems and escalated privileges via kernel-level exploitation to full root — not a lab simulation.</p>
+          <span class="src">SRC: InLighnX Global Pvt. Ltd., 2025</span>
+        </div>
+        <div class="finding high">
+          <div class="finding-top"><span class="fid">FINDING-02</span><span class="impact high">IMPACT: HIGH</span></div>
+          <h3>National CTF finalist</h3>
+          <p>Advanced to the finals of UST GenCyS 2025, competing head-to-head under time pressure on live exploitation and reverse-engineering challenges.</p>
+          <span class="src">SRC: UST / CyberProof, Aug 2025</span>
+        </div>
+        <div class="finding high">
+          <div class="finding-top"><span class="fid">FINDING-03</span><span class="impact high">IMPACT: HIGH</span></div>
+          <h3>Top 20% global rank on TryHackMe</h3>
+          <p>29 rooms completed, 5 badges earned, spanning Windows/Linux exploitation, reverse engineering, cryptography, and privilege escalation.</p>
+          <span class="src">SRC: TryHackMe, ongoing</span>
+        </div>
+        <div class="finding medium">
+          <div class="finding-top"><span class="fid">FINDING-04</span><span class="impact medium">IMPACT: MEDIUM</span></div>
+          <h3>Stacked, industry-recognised certifications</h3>
+          <p>CEH (EC-Council), Certified Pen Tester (KIIS), plus completed AWS Security Specialty exam preparation — credentials, not just coursework.</p>
+          <span class="src">SRC: Certifications, 2025–2026</span>
+        </div>
+        <div class="finding medium">
+          <div class="finding-top"><span class="fid">FINDING-05</span><span class="impact medium">IMPACT: MEDIUM</span></div>
+          <h3>Published, peer-visible research</h3>
+          <p>Co-authored an IEEE Xplore paper on AI-based accessibility tooling; separately built a steganography-based data-concealment project.</p>
+          <span class="src">SRC: IEEE Xplore</span>
+        </div>
+        <div class="finding medium">
+          <div class="finding-top"><span class="fid">FINDING-06</span><span class="impact medium">IMPACT: MEDIUM</span></div>
+          <h3>Already embedded in a live SecOps team</h3>
+          <p>Currently auditing policy, running vulnerability scans, and driving incident-response documentation for a real Security Operations team — not a classroom exercise.</p>
+          <span class="src">SRC: BirthdayMessaging, current</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="timeline">
+    <div class="wrap">
+      <p class="sec-eyebrow reveal">02 · ENGAGEMENT HISTORY</p>
+      <h2 class="reveal">Where this experience was built</h2>
+      <p class="sec-desc reveal">Most recent first. Full detail is in the CV.</p>
+
+      <div class="timeline reveal">
+        <div class="tl-item">
+          <div class="tl-head"><span class="tl-status active">ACTIVE</span><span class="tl-date">Jul 2026 – Present</span></div>
+          <h3>Cybersecurity Intern, Security Operations</h3>
+          <div class="org">BirthdayMessaging · London, UK (Remote)</div>
+          <ul>
+            <li>Runs web application security scans and vulnerability analysis, delivering prioritised remediation plans.</li>
+            <li>Audits security policy against industry best practice; drafts updated procedures after stakeholder interviews.</li>
+            <li>Supports incident response and documents workflows used to reinforce defense protocols.</li>
+          </ul>
+        </div>
+        <div class="tl-item past">
+          <div class="tl-head"><span class="tl-status past">COMPLETE</span><span class="tl-date">Jun 2025 – Dec 2025</span></div>
+          <h3>Cybersecurity Intern, Ethical Hacking</h3>
+          <div class="org">InLighnX Global Pvt. Ltd. · Remote</div>
+          <ul>
+            <li>Found 5–6 vulnerabilities on internal systems and reached full root via kernel-level exploitation.</li>
+            <li>Delivered structured remediation reports demonstrating full attack paths.</li>
+          </ul>
+        </div>
+        <div class="tl-item past">
+          <div class="tl-head"><span class="tl-status past">COMPLETE</span><span class="tl-date">Jun 2025 – Dec 2025</span></div>
+          <h3>Cybersecurity &amp; Ethical Hacking Training Programme</h3>
+          <div class="org">KLEAP Institute of Information Security (KIIS) · On-site</div>
+          <ul>
+            <li>Analysed network traffic with Wireshark; ran vulnerability scans and hands-on pentests.</li>
+            <li>Awarded a Letter of Recommendation for technical performance.</li>
+          </ul>
+        </div>
+        <div class="tl-item past">
+          <div class="tl-head"><span class="tl-status past">COMPLETE</span><span class="tl-date">Jun 2024 – Aug 2024</span></div>
+          <h3>Cybersecurity &amp; Ethical Hacking Intern</h3>
+          <div class="org">Threat-Prism · Remote</div>
+          <ul>
+            <li>Executed penetration tests: information gathering, footprinting, and exploitation of app/network vulnerabilities.</li>
+          </ul>
+        </div>
+        <div class="tl-item past">
+          <div class="tl-head"><span class="tl-status past">COMPLETE</span><span class="tl-date">May 2024 – Jul 2024</span></div>
+          <h3>Virtual Cybersecurity Intern</h3>
+          <div class="org">Cisco Networking Academy / AICTE (Skill India) · Remote</div>
+          <ul>
+            <li>Hands-on exposure to network security concepts and security assessment fundamentals.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="matrix">
+    <div class="wrap">
+      <p class="sec-eyebrow reveal">03 · TOOLSET</p>
+      <h2 class="reveal">Attack surface covered</h2>
+      <p class="sec-desc reveal">Self-rated depth, grouped by domain — happy to be tested on any of these live.</p>
+
+      <div class="matrix reveal">
+        <div class="m-row">
+          <div class="m-cat">Offensive Security<div class="dots"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div></div>
+          <div class="m-tags"><span>Penetration Testing</span><span>VAPT</span><span>Metasploit</span><span>Nmap</span><span>Burp Suite</span><span>OWASP Top 10</span><span>CVE Analysis</span></div>
+        </div>
+        <div class="m-row">
+          <div class="m-cat">Network &amp; Systems<div class="dots"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div></div>
+          <div class="m-tags"><span>Wireshark</span><span>Kali Linux</span><span>Linux</span><span>Reverse Engineering</span><span>Network Security</span></div>
+        </div>
+        <div class="m-row">
+          <div class="m-cat">SOC &amp; Threat Ops<div class="dots"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></div></div>
+          <div class="m-tags"><span>Threat Detection</span><span>Log Analysis</span><span>Incident Response</span><span>SIEM Fundamentals</span><span>MITRE ATT&amp;CK</span></div>
+        </div>
+        <div class="m-row">
+          <div class="m-cat">Cloud Security<div class="dots"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></div></div>
+          <div class="m-tags"><span>AWS Security</span><span>AWS Network Firewall</span><span>CloudWatch</span><span>IBM Cloud Fundamentals</span></div>
+        </div>
+        <div class="m-row">
+          <div class="m-cat">Programming &amp; Docs<div class="dots"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></div></div>
+          <div class="m-tags"><span>Python Scripting</span><span>Steganography</span><span>Technical Documentation</span><span>Security Reporting</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="certs">
+    <div class="wrap">
+      <p class="sec-eyebrow reveal">04 · EVIDENCE</p>
+      <h2 class="reveal">Certifications on file</h2>
+      <div class="cert-list reveal">
+        <div class="cert"><span class="clip">📎</span><div><h4>Certified Ethical Hacker (CEH)</h4><div class="meta">EC-Council · Sept 2025</div></div></div>
+        <div class="cert"><span class="clip">📎</span><div><h4>Certified Pen Tester (CPT)</h4><div class="meta">KIIS · Feb 2026</div></div></div>
+        <div class="cert"><span class="clip">📎</span><div><h4>Cybersecurity Educator Professional</h4><div class="meta">Red Team Leaders · Nov 2025</div></div></div>
+        <div class="cert"><span class="clip">📎</span><div><h4>Ethical Hacking Essentials</h4><div class="meta">EC-Council</div></div></div>
+        <div class="cert"><span class="clip">📎</span><div><h4>AWS Network Firewall Threat Hunting</h4><div class="meta">AWS Training · May 2026</div></div></div>
+        <div class="cert"><span class="clip">📎</span><div><h4>AWS Security Specialty (SCS-C03) Prep</h4><div class="meta">AWS Training · May 2026</div></div></div>
+        <div class="cert"><span class="clip">📎</span><div><h4>Foundations of Cybersecurity</h4><div class="meta">Google</div></div></div>
+        <div class="cert"><span class="clip">📎</span><div><h4>SOAR for Enterprise Security</h4><div class="meta">Codio</div></div></div>
+        <div class="cert"><span class="clip">📎</span><div><h4>Intro to Cloud Computing</h4><div class="meta">IBM</div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects">
+    <div class="wrap">
+      <p class="sec-eyebrow reveal">05 · RESEARCH &amp; PROJECTS</p>
+      <h2 class="reveal">Beyond the internships</h2>
+      <div class="reveal">
+        <div class="proj">
+          <span class="badge">SECURITY</span>
+          <h3>Comprehensive Web Service Security Audit &amp; Data Concealment</h3>
+          <p>Advanced vulnerability detection and penetration testing on live web services, plus a steganography-based data-concealment implementation. Paper prepared for publication.</p>
+        </div>
+        <div class="proj">
+          <span class="badge">RESEARCH</span>
+          <h3>Generative AI-Based Currency Detector for the Visually Impaired</h3>
+          <p>AI-driven system to detect and classify currency for visually impaired users, focused on real-world accessibility. Published in IEEE Xplore.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="education">
+    <div class="wrap">
+      <p class="sec-eyebrow reveal">06 · EDUCATION</p>
+      <h2 class="reveal">Academic record</h2>
+      <div class="reveal">
+        <div class="edu-row">
+          <div><h3>MSc Cybersecurity (with Placement Year)</h3><div class="school">University of Hertfordshire, Hatfield, UK</div></div>
+          <div class="date">Jan 2026 – Jan 2028</div>
+        </div>
+        <div class="edu-row">
+          <div><h3>BTech Cybersecurity</h3><div class="school">Alliance University, Bengaluru, India</div></div>
+          <div class="date">Sept 2021 – May 2025</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="wrap">
+      <div class="close-panel reveal">
+        <h2>Ready to put this in front of your SOC?</h2>
+        <p>Actively interviewing for UK-based penetration testing, VAPT, or ethical hacking roles — internship, placement, or entry-level. Response within 24 hours.</p>
+        <div class="close-cta">
+          <a class="btn primary" href="mailto:saikumarbattala10@gmail.com?subject=Interview%20Request%20%E2%80%94%20Sai%20Kumar%20Battala&body=Hi%20Sai%2C%0A%0AWe%27d%20like%20to%20schedule%20an%20interview.%20Are%20you%20available%20for%20a%20call%20this%20week%3F">→ Request an interview</a>
+          <a class="btn" href="Sai_Kumar_Battala_VAPT_Resume.pdf" download>↓ Download CV (PDF)</a>
+        </div>
+        <div class="contact-line">
+          <a href="tel:+447721604874">+44 7721 604874</a>
+          <a href="mailto:saikumarbattala10@gmail.com">saikumarbattala10@gmail.com</a>
+          <a href="https://linkedin.com/in/sai-kumar-battala" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://github.com/cybercomics" target="_blank" rel="noopener">GitHub</a>
+          <span>Luton / London — open to commute</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>© 2026 Sai Kumar Battala. Static page — no data leaves this browser.</footer>
+</main>
+
+<script>
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var reveals = document.querySelectorAll('.reveal');
+  if(!reduced && 'IntersectionObserver' in window){
+    reveals.forEach(function(r){ r.classList.add('pre'); });
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.1 });
+    reveals.forEach(function(r){ io.observe(r); });
+  }
+</script>
+</body>
+</html>
